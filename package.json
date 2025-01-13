@@ -9,11 +9,19 @@
     "dist"
   ],
   "license": "MIT",
+  "homepage": "https://github.com/cysshi/qqlangrensha",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cysshi/qqlangrensha.git"
+  },
   "scripts": {},
   "keywords": [
     "chatbot",
     "koishi",
-    "plugin"
+    "plugin",
+    "狼人杀",
+    "QQ",
+    "bot"
   ],
   "devDependencies": {},
   "peerDependencies": {

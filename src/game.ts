@@ -175,7 +175,7 @@ export class GameState {
     }
 
     await this.broadcast('天黑了！狼人和预言家请行动（120秒）')
-    await this.broadcast('天黑了！请查看 /查看身份 获取可执行的命令', true)
+    await this.broadcast('天黑了！请使用 /查看身份 获取可执行的命令', true)
     
     // 重置投票计数
     const players = await this.ctx.database.get('werewolf_players', { game_id: this.game.id }) as WerewolfPlayer[]
