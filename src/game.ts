@@ -37,14 +37,12 @@ export class GameState {
   private phase: 'prepare' | 'night' | 'day' | 'vote' | 'ended' = 'prepare'
   private guildSessions: {
     session: any,
-    useCount: number,
     lastUseTime: number
   }[] = []
   private playerSessions: Map<string, any> = new Map()
   private timer: NodeJS.Timeout | null = null
   private prepareTimer: NodeJS.Timeout | null = null
   private dayCount: number = 0
-  private readonly MAX_SESSION_USE = 5
   private readonly SESSION_EXPIRE_TIME = 5 * 60 * 1000 // 5分钟
   private readonly PREPARE_TIMEOUT = 300 * 1000 // 300秒
   private readonly MAX_DAYS = 10 // 最大游戏天数
@@ -61,12 +59,13 @@ export class GameState {
     if (!session) return
     this.guildSessions.push({
       session,
-      useCount: 0,
       lastUseTime: Date.now()
     })
   }
 
   updateGuildSession(session: any) {
+    if (!session) return
+
     // 清理过期的session
     const now = Date.now()
     this.guildSessions = this.guildSessions.filter(s => 
@@ -74,11 +73,13 @@ export class GameState {
     )
 
     // 检查是否已存在相同的session
-    const existingSession = this.guildSessions.find(s => s.session === session)
-    if (existingSession) {
-      // 如果已达到使用次数限制，不更新
-      if (existingSession.useCount >= this.MAX_SESSION_USE) return
-      existingSession.lastUseTime = now
+    const existingIndex = this.guildSessions.findIndex(s => s.session === session)
+    if (existingIndex !== -1) {
+      // 用新的session覆盖旧的并更新时间戳
+      this.guildSessions[existingIndex] = {
+        session,
+        lastUseTime: now
+      }
       return
     }
 
@@ -102,14 +103,12 @@ export class GameState {
         // 获取可用的session
         const now = Date.now()
         const availableSession = this.guildSessions.find(s => 
-          s.useCount < this.MAX_SESSION_USE && 
           now - s.lastUseTime < this.SESSION_EXPIRE_TIME
         )
 
         if (availableSession) {
           await availableSession.session.send(message)
-          availableSession.useCount++
-          availableSession.lastUseTime = now
+          // 不更新lastUseTime，保持第一次使用时的时间戳
         } else {
           console.error('No available guild session for broadcast')
         }

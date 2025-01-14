@@ -1,6 +1,6 @@
 {
   "name": "koishi-plugin-qqlangrensha",
-  "description": "",
+  "description": "qq官方bot狼人杀游戏插件",
   "version": "1.0.0",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -14,7 +14,6 @@
     "type": "git",
     "url": "https://github.com/cysshi/qqlangrensha.git"
   },
-  "scripts": {},
   "keywords": [
     "chatbot",
     "koishi",
@@ -23,7 +22,6 @@
     "QQ",
     "bot"
   ],
-  "devDependencies": {},
   "peerDependencies": {
     "koishi": "^4.18.3"
   }
